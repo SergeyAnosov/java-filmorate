@@ -2,15 +2,15 @@ package ru.yandex.practicum.filmorate.models;
 
 import lombok.Data;
 import ru.yandex.practicum.filmorate.annotations.ReleaseDateValidation;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Data
-public class Film {
+public class  Film {
     private int id;
-
     @NotBlank(message = "Название не может быть пустым.")
     final String name;
 

@@ -45,4 +45,8 @@ public class FilmController {
         }
         return film;
     }
+
+    public Map<Integer, Film> getFilms() {
+        return films;
+    }
 }

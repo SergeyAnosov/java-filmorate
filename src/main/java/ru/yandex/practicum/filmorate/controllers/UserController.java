@@ -47,4 +47,8 @@ public class UserController {
         }
         return user;
     }
+
+    public Map<Integer, User> getUsers() {
+        return users;
+    }
 }

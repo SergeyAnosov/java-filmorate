@@ -40,6 +40,9 @@ public class UserController {
     @PutMapping
     public User put(@Valid @RequestBody User user) {
         if (users.containsKey(user.getId())) {
+            if (user.getName() == null || user.getName().isBlank()) {
+                user.setName(user.getLogin());
+            }
             users.put(user.getId(), user);
             log.info("Получен запрос на обновление пользователя {} ", user);
         } else {

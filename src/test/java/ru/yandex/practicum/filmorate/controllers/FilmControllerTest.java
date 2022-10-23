@@ -1,3 +1,4 @@
+/*
 package ru.yandex.practicum.filmorate.controllers;
 import org.junit.jupiter.api.*;
 import ru.yandex.practicum.filmorate.models.Film;
@@ -30,3 +31,4 @@ public class FilmControllerTest {
         assertEquals(updateFilm.getDuration(), 240L);
     }
 }
+*/

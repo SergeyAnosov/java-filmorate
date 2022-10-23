@@ -2,56 +2,64 @@ package ru.yandex.practicum.filmorate.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import ru.yandex.practicum.filmorate.models.User;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final static Logger log = LoggerFactory.getLogger(UserController.class);
-    private int id = 1;
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    private final Map<Integer, User> users = new HashMap<>();
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public Collection<User> findAll() {
-        return users.values();
+        return userService.getUserStorage().findAll();
+    }
+    @GetMapping("/{id}")
+    public User findUser(@PathVariable int id) {
+        return userService.getUserStorage().findById(id);
     }
 
+    @PutMapping("/{id}/friends/{friendId}")
+    public void addFriend(@PathVariable int id, @PathVariable int friendId) {
+        userService.addFriend(id, friendId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public void deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+        userService.deleteFriend(id, friendId);
+    }
+    @GetMapping("/{id}/friends")
+    public List<User> getFriends(@PathVariable int id) {
+        return userService.getFriends(id);
+    }
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getCommonFriends(@PathVariable int id, @PathVariable int otherId) {
+        return userService.getCommonFriends(id, otherId);
+    }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@Valid @RequestBody User user) {
-        user.setId(id++);
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-        users.put(user.getId(), user);
-        log.info("Получен запрос на внесение пользователя {} ", user);
+        userService.getUserStorage().addUser(user);
         return user;
     }
-
     @PutMapping
     public User put(@Valid @RequestBody User user) {
-        if (users.containsKey(user.getId())) {
-            if (user.getName() == null || user.getName().isBlank()) {
-                user.setName(user.getLogin());
-            }
-            users.put(user.getId(), user);
-            log.info("Получен запрос на обновление пользователя {} ", user);
-        } else {
-            throw new ValidationException("ошибка валидации юзера");
-        }
+        userService.getUserStorage().updateUser(user);
         return user;
-    }
-
-    public Map<Integer, User> getUsers() {
-        return users;
     }
 }

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 public class FilmControllerTest {
 
-    FilmController filmController = new FilmController();
+    //FilmController filmController = new FilmController();
 
     @Test
     @DisplayName("Сохраняем и проверяем корректный фильм")
@@ -31,4 +31,4 @@ public class FilmControllerTest {
         assertEquals(updateFilm.getDuration(), 240L);
     }
 }
-
+*/

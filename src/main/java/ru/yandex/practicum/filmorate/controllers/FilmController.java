@@ -1,12 +1,11 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import ru.yandex.practicum.filmorate.models.Film;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.FilmServiceInterface;
 
 import javax.validation.Valid;
 
@@ -15,12 +14,11 @@ import java.util.*;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private static final Logger log = LoggerFactory.getLogger(FilmController.class);
 
-    private final FilmService filmService;
+    private final FilmServiceInterface filmService;
 
     @Autowired
-    public FilmController(FilmService filmService) {
+    public FilmController(FilmServiceInterface filmService) {
         this.filmService = filmService;
     }
 

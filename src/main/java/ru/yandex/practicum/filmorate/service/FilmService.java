@@ -1,7 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.EntityNotFoundException;
@@ -14,8 +12,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class FilmService {
-    private static final Logger log = LoggerFactory.getLogger(FilmService.class);
+
+public class FilmService implements FilmServiceInterface {
 
     private final FilmStorage filmStorage;
 
@@ -23,30 +21,31 @@ public class FilmService {
     public FilmService(FilmStorage filmStorage) {
         this.filmStorage = filmStorage;
     }
+    @Override
     public FilmStorage getFilmStorage() {
         return filmStorage;
     }
 
+
+    @Override
     public void addLike(int filmId, int userId) {
-        if (filmStorage.findAll().contains(filmStorage.getById(filmId))) {
-            if (filmStorage.getById(filmId) != null) {
-                filmStorage.getById(filmId).getLikes().add(userId);
-            }
-        } else {
-            throw new EntityNotFoundException("Такого фильма не существует");
+        if (!filmStorage.findAll().contains(filmStorage.getById(filmId))) {
+            throw new EntityNotFoundException("Такого фильма c id " + filmId + " не существует");
+        }
+        if (filmStorage.getById(filmId) != null) {
+            filmStorage.getById(filmId).getLikes().add(userId);
         }
     }
 
+    @Override
     public void deleteLike(int filmId, int userId) {
-        if (filmStorage.findAll().contains(filmStorage.getById(filmId))) {
-            if (userId > 0) {
-                filmStorage.getById(filmId).getLikes().remove(userId);
-            } else {
-                throw new IncorrectParameterException("userId");
-            }
-        } else {
-            throw new EntityNotFoundException("Такого фильма не существует");
+        if (!filmStorage.findAll().contains(filmStorage.getById(filmId))) {
+            throw new EntityNotFoundException("Такого фильма c id " + filmId + " не существует");
         }
+        if (userId <= 0) {
+            throw new IncorrectParameterException("userId");
+        }
+        filmStorage.getById(filmId).getLikes().remove(userId);
     }
 
     public List<Film> getTopLikesFilms(int size) {

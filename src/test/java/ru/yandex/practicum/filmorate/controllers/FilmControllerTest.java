@@ -31,4 +31,4 @@ public class FilmControllerTest {
         assertEquals(updateFilm.getDuration(), 240L);
     }
 }
-*/
+

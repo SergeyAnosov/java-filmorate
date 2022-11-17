@@ -4,6 +4,6 @@
 ___
 Изображение БД
 
-![ER_diagramma](src/main/resources/ER_diagram.png)
+![ER_diagram](src/main/resources/ER_diagram.PNG)
 
 

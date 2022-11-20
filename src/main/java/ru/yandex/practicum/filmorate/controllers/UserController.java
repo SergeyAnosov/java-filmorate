@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import ru.yandex.practicum.filmorate.models.User;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.service.UserServiceInterface;
+import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -17,9 +19,23 @@ public class UserController {
 
     private final UserServiceInterface userService;
 
+
     @Autowired
     public UserController(UserServiceInterface userService) {
         this.userService = userService;
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public User create(@Valid @RequestBody User user) {
+        userService.getUserStorage().createUser(user);
+        return user;
+    }
+
+    @PutMapping
+    public User put(@Valid @RequestBody User user) {
+        userService.getUserStorage().updateUser(user);
+        return user;
     }
 
     @GetMapping
@@ -48,15 +64,6 @@ public class UserController {
     public List<User> getCommonFriends(@PathVariable int id, @PathVariable int otherId) {
         return userService.getCommonFriends(id, otherId);
     }
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public User create(@Valid @RequestBody User user) {
-        userService.getUserStorage().addUser(user);
-        return user;
-    }
-    @PutMapping
-    public User put(@Valid @RequestBody User user) {
-        userService.getUserStorage().updateUser(user);
-        return user;
-    }
+
+
 }

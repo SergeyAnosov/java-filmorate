@@ -10,7 +10,10 @@ import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.ErrorResponse;
 
 
-@RestControllerAdvice(assignableTypes = {FilmController.class, UserController.class})
+@RestControllerAdvice(assignableTypes = {FilmController.class,
+                                        UserController.class,
+                                        GenreController.class,
+                                        MpaController.class})
 
 public class ErrorHandler {
 

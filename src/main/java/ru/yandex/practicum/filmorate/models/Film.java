@@ -1,9 +1,6 @@
 package ru.yandex.practicum.filmorate.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import ru.yandex.practicum.filmorate.annotations.ReleaseDateValidation;
 
 import javax.validation.constraints.NotBlank;
@@ -16,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Data
-public class  Film {
+public class Film {
     private Integer id;
     @NotBlank(message = "Название не может быть пустым.")
     private final String name;

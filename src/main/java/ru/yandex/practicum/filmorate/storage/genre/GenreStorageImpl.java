@@ -3,27 +3,28 @@ package ru.yandex.practicum.filmorate.storage.genre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.models.Genre;
+
 import java.util.ArrayList;
 import java.util.List;
 
-
-@Component
-public class GenreDbStorage {
+@Repository
+public class GenreStorageImpl implements GenreStorage {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public GenreDbStorage(JdbcTemplate jdbcTemplate) {
+    public GenreStorageImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Override
     public Genre getGenreById(int id) {
         SqlRowSet mpaRows = jdbcTemplate.queryForRowSet("SELECT * FROM GENRES WHERE GENRE_ID = ?", id);
 
-        if(mpaRows.next()) {
+        if (mpaRows.next()) {
             return new Genre(
                     mpaRows.getInt("genre_id"),
                     mpaRows.getString("name")
@@ -33,10 +34,11 @@ public class GenreDbStorage {
         }
     }
 
-       public List<Genre> getAllGenres() {
+    @Override
+    public List<Genre> getAllGenres() {
         List<Genre> genres = new ArrayList<>();
         SqlRowSet mpaRows = jdbcTemplate.queryForRowSet("SELECT * FROM GENRES");
-        while (mpaRows.next()){
+        while (mpaRows.next()) {
             Genre genre = new Genre(
                     mpaRows.getInt("genre_id"),
                     mpaRows.getString("name")
@@ -46,15 +48,18 @@ public class GenreDbStorage {
         return genres;
     }
 
+    @Override
     public void putGenres(Film film) {
         deleteFilmGenre(film);
         addFilmGenre(film);
     }
 
+    @Override
     public void deleteFilmGenre(Film film) {
         jdbcTemplate.update("DELETE FROM FILM_GENRES WHERE film_id = ?", film.getId());
     }
 
+    @Override
     public void addFilmGenre(Film film) {
         if (film.getGenres() != null) {
             for (Genre genre : film.getGenres()) {

@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.models.User;
 import javax.validation.ValidationException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -17,7 +16,6 @@ public class InMemoryUserStorage implements UserStorage {
 
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserStorage.class);
     private int id = 1;
-
     private final Map<Integer, User> users = new HashMap<>();
 
 
@@ -37,6 +35,7 @@ public class InMemoryUserStorage implements UserStorage {
         log.info("Получен запрос на внесение пользователя {} ", user);
         return user;
     }
+
     @Override
     public User updateUser(User user) {
         if (users.containsKey(user.getId())) {

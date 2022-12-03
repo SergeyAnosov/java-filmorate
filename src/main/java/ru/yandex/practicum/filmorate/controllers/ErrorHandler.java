@@ -11,9 +11,9 @@ import ru.yandex.practicum.filmorate.models.ErrorResponse;
 
 
 @RestControllerAdvice(assignableTypes = {FilmController.class,
-                                        UserController.class,
-                                        GenreController.class,
-                                        MpaController.class})
+        UserController.class,
+        GenreController.class,
+        MpaController.class})
 
 public class ErrorHandler {
 

@@ -1,37 +1,44 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.service.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.EntityNotFoundException;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.User;
 import ru.yandex.practicum.filmorate.storage.friend.FriendStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserServiceInterface {
-
+public class UserServiceImpl implements UserService {
     private final UserStorage userStorage;
-    private FriendStorage friendStorage;
-
+    private final FriendStorage friendStorage;
 
     @Autowired
-    public UserService(@Qualifier("userDbStorage") UserStorage userStorage, FriendStorage friendStorage) {
+    public UserServiceImpl(@Qualifier("userDbStorage") UserStorage userStorage, FriendStorage friendStorage) {
         this.userStorage = userStorage;
         this.friendStorage = friendStorage;
     }
 
     @Override
-    public UserStorage getUserStorage() {
-        return userStorage;
+    public User createUser(User user) {
+        return userStorage.createUser(user);
+    }
+
+    @Override
+    public User updateUser(User user) {
+        return userStorage.updateUser(user);
+    }
+
+    @Override
+    public Collection<User> findAll() {
+        return userStorage.findAll();
+    }
+
+    @Override
+    public User findUser(int id) {
+        return userStorage.findById(id);
     }
 
     @Override

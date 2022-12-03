@@ -1,55 +1,57 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.service.film;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.EntityNotFoundException;
-import ru.yandex.practicum.filmorate.exceptions.IncorrectParameterException;
 import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-
-public class FilmService {
+public class FilmServiceImpl implements FilmService {
 
     private final FilmStorage filmStorage;
     private final LikeStorage likeStorage;
 
     @Autowired
-
-    public FilmService(@Qualifier("filmDbStorage") FilmStorage filmStorage, LikeStorage likeStorage) {
+    public FilmServiceImpl(@Qualifier("filmDbStorage") FilmStorage filmStorage, LikeStorage likeStorage) {
         this.filmStorage = filmStorage;
         this.likeStorage = likeStorage;
     }
+
+    @Override
     public void addLike(int filmId, int userId) {
-       likeStorage.addLike(filmId,userId);
-    }
-    public Film createFilm(Film film) {
-      return filmStorage.createFilm(film);
+        likeStorage.addLike(filmId, userId);
     }
 
+    @Override
+    public void deleteLike(int filmId, int userId) {
+        likeStorage.deleteLike(filmId, userId);
+    }
+
+    @Override
+    public Film createFilm(Film film) {
+        return filmStorage.createFilm(film);
+    }
+
+    @Override
     public List<Film> findAll() {
         return filmStorage.findAll();
     }
 
+    @Override
     public Film getFilmById(int filmId) {
         return filmStorage.getFilmById(filmId);
     }
 
+    @Override
     public Film updateFilm(Film film) {
         return filmStorage.updateFilm(film);
     }
 
-
-    public void deleteLike(int filmId, int userId) {
-        likeStorage.deleteLike(filmId,userId);
-    }
-
+    @Override
     public List<Film> getTopLikesFilms(int size) {
         return filmStorage.getPopularFilms(size);
     }

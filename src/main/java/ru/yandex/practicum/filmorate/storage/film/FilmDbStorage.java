@@ -10,11 +10,8 @@ import ru.yandex.practicum.filmorate.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.models.Film;
 import ru.yandex.practicum.filmorate.models.Genre;
-import ru.yandex.practicum.filmorate.models.Mpa;
-import ru.yandex.practicum.filmorate.storage.genre.GenreDbStorage;
-import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
-import ru.yandex.practicum.filmorate.storage.mpa.MpaDbStorage;
-
+import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
+import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 import java.util.*;
 
 
@@ -22,16 +19,16 @@ import java.util.*;
 @Component("filmDbStorage")
 public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
-    private final MpaDbStorage mpaDbStorage;
-    private final GenreDbStorage genreDbStorage;
-    private final LikeStorage likeStorage;
+    private final MpaStorage mpaStorage;
+    private final GenreStorage genreStorage;
+
 
     @Autowired
-    public FilmDbStorage(JdbcTemplate jdbcTemplate, MpaDbStorage mpaDbStorage, GenreDbStorage genreDbStorage, LikeStorage likeStorage) {
+    public FilmDbStorage(JdbcTemplate jdbcTemplate, MpaStorage mpaStorage, GenreStorage genreStorage) {
         this.jdbcTemplate = jdbcTemplate;
-        this.mpaDbStorage = mpaDbStorage;
-        this.genreDbStorage = genreDbStorage;
-        this.likeStorage = likeStorage;
+        this.mpaStorage = mpaStorage;
+        this.genreStorage = genreStorage;
+
     }
 
     @Override
@@ -40,7 +37,7 @@ public class FilmDbStorage implements FilmStorage {
                 .withTableName("FILMS")
                 .usingGeneratedKeyColumns("FILM_ID");
         film.setId(simpleJdbcInsert.executeAndReturnKey(film.toMap()).intValue());
-        genreDbStorage.addFilmGenre(film);
+        genreStorage.addFilmGenre(film);
         log.info("Фильм добавлен");
         return getFilmById(film.getId());
     }
@@ -63,7 +60,7 @@ public class FilmDbStorage implements FilmStorage {
                 rs.getString("DESCRIPTION"),
                 rs.getDate("RELEASE_DATE").toLocalDate(),
                 rs.getInt("DURATION"),
-                mpaDbStorage.getMpaById(rs.getInt("MPA_ID")),
+                mpaStorage.getMpaById(rs.getInt("MPA_ID")),
                 getLikesAmount(rs.getInt("FILM_ID")));
         film.setGenres(getFilmGenres(film.getId()));
         return film;
@@ -82,19 +79,10 @@ public class FilmDbStorage implements FilmStorage {
                     film.getDuration(),
                     film.getMpa().getId(),
                     film.getId());
-            mpaDbStorage.getMpaById(film.getMpa().getId());
-                /*if (film.getGenres() != null) {
-                /Collection<Genre> sortGenres = film.getGenres().stream()
-                        .sorted(Comparator.comparing(Genre::getId))
-                        .collect(Collectors.toList());
-                film.setGenres(new LinkedHashSet<>(sortGenres));
-                for (Genre genre : film.getGenres()) {
-                    genre.setName(genreDbStorage.getGenreById(genre.getId()).getName());
-                }*/
+            mpaStorage.getMpaById(film.getMpa().getId());
             removeFilmGenres(film.getId());
             addFilmGenres(film);
             film.setGenres(getFilmGenres(film.getId()));
-            //genreDbStorage.putGenres(film);
             return film;
         } else {
             throw new EntityNotFoundException("Фильм с ID=" + film.getId() + " не найден!");
@@ -158,17 +146,6 @@ public class FilmDbStorage implements FilmStorage {
                 genreRow.getString("NAME"));
     }
 
-    private Mpa getMpa(int id) {
-        SqlRowSet mpaRows = jdbcTemplate.queryForRowSet("select MPA_ID from RATINGS where mpa_id = ?", id);
-        if (mpaRows.next()) {
-            Mpa dbMpa = new Mpa(id,
-                    mpaRows.getString("name"));
-            return dbMpa;
-        } else {
-            return null;
-        }
-    }
-
     private void removeFilmGenres(int id) {
         String sqlQuery = "DELETE FROM FILM_GENRES WHERE film_id = ?";
         jdbcTemplate.update(sqlQuery, id);
@@ -178,7 +155,6 @@ public class FilmDbStorage implements FilmStorage {
         String sqlQuery = "SELECT * FROM FILMS WHERE film_id = ?";
         return jdbcTemplate.queryForRowSet(sqlQuery, id);
     }
-
 
     private void addFilmGenres(Film film) {
         checkGenre(film);
@@ -197,17 +173,6 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
-    private Mpa getFilmMpa(SqlRowSet filmRow) {
-        String sqlQuery = "SELECT * FROM RATINGS WHERE mpa_id = ?";
-        SqlRowSet mpaRow = jdbcTemplate.queryForRowSet(sqlQuery, filmRow.getInt("mpa_id"));
-        if (mpaRow.next()) {
-            return new Mpa(mpaRow.getInt("mpa_id"),
-                    mpaRow.getString("name"));
-        } else {
-            throw new EntityNotFoundException("MPA не найден.");
-        }
-    }
-
     private int getLikesAmount(int id) {
         String sql = "SELECT COUNT(FILM_ID) AS amount FROM FILM_LIKES WHERE FILM_ID =?";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, id);
@@ -217,5 +182,4 @@ public class FilmDbStorage implements FilmStorage {
             return 0;
         }
     }
-
 }

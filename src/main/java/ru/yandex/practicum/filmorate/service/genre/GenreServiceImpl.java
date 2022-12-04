@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.service.genre;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.models.Genre;
+import ru.yandex.practicum.filmorate.storage.film.model.Genre;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 
 import java.util.ArrayList;

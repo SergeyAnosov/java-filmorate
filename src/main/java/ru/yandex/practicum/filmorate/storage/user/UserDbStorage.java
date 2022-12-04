@@ -6,8 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.exceptions.EntityNotFoundException;
-import ru.yandex.practicum.filmorate.models.User;
+import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.storage.film.model.User;
 
 import javax.validation.ValidationException;
 import java.util.List;
@@ -56,7 +56,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public User updateUser(User user) {
         if (user.getId() == null) {
-            throw new ru.yandex.practicum.filmorate.exceptions.ValidationException("Передан пустой аргумент!");
+            throw new ru.yandex.practicum.filmorate.exception.ValidationException("Передан пустой аргумент!");
         }
         if (findById(user.getId()) != null) {
             String sqlQuery = "UPDATE users SET " +
@@ -91,7 +91,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public User findById(Integer id) {
         if (id == null) {
-            throw new ru.yandex.practicum.filmorate.exceptions.ValidationException("Передан пустой аргумент!");
+            throw new ru.yandex.practicum.filmorate.exception.ValidationException("Передан пустой аргумент!");
         }
         User user;
         SqlRowSet userRows = jdbcTemplate.queryForRowSet("SELECT * FROM users WHERE USER_ID = ?", id);

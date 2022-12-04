@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.genre;
 
-import ru.yandex.practicum.filmorate.models.Film;
-import ru.yandex.practicum.filmorate.models.Genre;
+import ru.yandex.practicum.filmorate.storage.film.model.Film;
+import ru.yandex.practicum.filmorate.storage.film.model.Genre;
 
 import java.util.List;
 

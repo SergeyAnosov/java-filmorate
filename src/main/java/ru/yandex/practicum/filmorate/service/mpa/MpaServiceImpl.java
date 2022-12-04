@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.service.mpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.models.Mpa;
+import ru.yandex.practicum.filmorate.storage.film.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 
 import java.util.ArrayList;

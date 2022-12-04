@@ -1,8 +1,8 @@
-package ru.yandex.practicum.filmorate.controllers;
+package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import ru.yandex.practicum.filmorate.models.User;
+import ru.yandex.practicum.filmorate.storage.film.model.User;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.service.user.UserService;
 

@@ -1,7 +1,7 @@
-package ru.yandex.practicum.filmorate.models;
+package ru.yandex.practicum.filmorate.storage.film.model;
 
 import lombok.Data;
-import ru.yandex.practicum.filmorate.annotations.ReleaseDateValidation;
+import ru.yandex.practicum.filmorate.annotation.ReleaseDateValidation;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;

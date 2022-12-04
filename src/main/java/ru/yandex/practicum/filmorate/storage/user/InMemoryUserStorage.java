@@ -3,8 +3,8 @@ package ru.yandex.practicum.filmorate.storage.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exceptions.EntityNotFoundException;
-import ru.yandex.practicum.filmorate.models.User;
+import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.storage.film.model.User;
 
 import javax.validation.ValidationException;
 import java.util.Collection;

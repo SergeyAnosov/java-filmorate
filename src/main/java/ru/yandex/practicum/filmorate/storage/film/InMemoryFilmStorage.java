@@ -1,15 +1,17 @@
+/*
+
 package ru.yandex.practicum.filmorate.storage.film;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.controllers.FilmController;
 import ru.yandex.practicum.filmorate.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.models.Film;
 
 import javax.validation.ValidationException;
-import java.util.Collection;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -20,7 +22,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
 
     @Override
-    public Collection<Film> findAll() {
+    public List<Film> findAll() {
         log.info("Получен запрос на вывод всех фильмов");
         return films.values();
     }
@@ -66,3 +68,5 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
     }
 }
+
+*/

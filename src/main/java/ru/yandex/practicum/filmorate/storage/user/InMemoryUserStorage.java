@@ -3,8 +3,8 @@ package ru.yandex.practicum.filmorate.storage.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exceptions.EntityNotFoundException;
-import ru.yandex.practicum.filmorate.models.User;
+import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.storage.film.model.User;
 
 import javax.validation.ValidationException;
 import java.util.Collection;
@@ -16,7 +16,6 @@ public class InMemoryUserStorage implements UserStorage {
 
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserStorage.class);
     private int id = 1;
-
     private final Map<Integer, User> users = new HashMap<>();
 
 
@@ -27,7 +26,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User addUser(User user) {
+    public User createUser(User user) {
         user.setId(id++);
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
@@ -36,6 +35,7 @@ public class InMemoryUserStorage implements UserStorage {
         log.info("Получен запрос на внесение пользователя {} ", user);
         return user;
     }
+
     @Override
     public User updateUser(User user) {
         if (users.containsKey(user.getId())) {
@@ -64,7 +64,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User findById(int id) {
+    public User findById(Integer id) {
         if (users.containsKey(id)) {
             return users.get(id);
         } else {

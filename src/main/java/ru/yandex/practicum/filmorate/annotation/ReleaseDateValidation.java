@@ -1,6 +1,6 @@
-package ru.yandex.practicum.filmorate.annotations;
+package ru.yandex.practicum.filmorate.annotation;
 
-import ru.yandex.practicum.filmorate.annotations.validators.ReleaseDateValidator;
+import ru.yandex.practicum.filmorate.annotation.validators.ReleaseDateValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

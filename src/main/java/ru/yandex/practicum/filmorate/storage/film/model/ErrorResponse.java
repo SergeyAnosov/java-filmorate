@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.models;
+package ru.yandex.practicum.filmorate.storage.film.model;
 
 public class ErrorResponse {
     // название ошибки

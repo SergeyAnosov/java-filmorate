@@ -182,4 +182,33 @@ public class FilmDbStorage implements FilmStorage {
             return 0;
         }
     }
+    
+    @Override
+    public List<Film> getCommonsFilms(int userId, int friendId) {
+        checkUser(userId);
+        checkUser(friendId);
+        String sql = "SELECT film_id from film_likes WHERE user_id = ?
+                        INTERSECT
+                       SELECT film_id from film_likes WHERE user_id = ?";
+        List<Film> commonFilms = new ArrayList<Film>():
+        SqlRowSet rowSets = jdbcTemplate.queryForRowSet(sql, userId, friendId);
+          if (rowSets.next()) {
+            Film film = getFilmFromRow(rowSets);
+            commonFilms.add(film);
+          }
+        return  commonFilms;
+    }
+    
+    private void checkUser(int id) {
+        String sql = "SELECT * FROM USERS WHERE USER_ID =?";
+        SqlRowSet userRow = jdbcTemplate.queryForRowSet(sql, id);
+        if (userRow.next()) {
+            log.info("пользовтель с ID = " + id + " найден");
+        } else {
+            log.info("пользовтеля с ID = " + id + " не существует");
+            throw new EntityNotFoundException("пользовтеля с ID = " + id + " не существует");
+        }
+    }
+           
+        
 }

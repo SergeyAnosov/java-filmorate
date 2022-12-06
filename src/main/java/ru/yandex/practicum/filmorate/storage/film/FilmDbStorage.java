@@ -182,4 +182,42 @@ public class FilmDbStorage implements FilmStorage {
             return 0;
         }
     }
+    
+    @Test
+  @DisplayName("users-count-test")
+  void usersCountTest() {
+    
+    String sql = "SELECT count(*) FROM USER";
+    
+    int total = jdbcTemplate.queryForObject(sql, Integer.class);
+    assertTrue(total == 12);
+  }
+    https://javabydeveloper.com/spring-jdbctemplate-query-examples/
+    
+    @Test
+  @DisplayName("find-by-id-test")
+  void findWeakUsersTest() {
+    
+    String sql = "SELECT USERNAME FROM USER where LENGTH(USERNAME) < 7";
+    
+    List<String> users = jdbcTemplate.queryForList(sql, String.class);
+    assertTrue(users.size() == 5);
+  }
+    @Test
+  @DisplayName("find-users-test")
+  void findUsersTest() {
+    
+    String sql = "SELECT ID, USERNAME, IF(PASSWORD REGEXP '[0-9]', 'true', 'false') as HAS_NUMERIC_PASSWORD FROM USER";
+    
+    List<Map<String, Object>> users = jdbcTemplate.queryForList(sql);
+    
+    users.forEach( rowMap -> {
+      Long id = (Long) rowMap.get("ID");
+      String userName = (String) rowMap.get("USERNAME");
+      boolean hasNumericPass = Boolean.valueOf(rowMap.get("HAS_NUMERIC_PASSWORD").toString());
+      System.out.println(id +"-"+userName+"-"+hasNumericPass);
+    });
+      
+      
+  }
 }
